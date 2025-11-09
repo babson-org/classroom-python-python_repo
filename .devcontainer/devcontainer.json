@@ -1,5 +1,5 @@
 {
-  "name": "Python Dev Environment (Frozen)",
+  "name": "Python Dev Environment (Stable)",
   "image": "mcr.microsoft.com/devcontainers/python:3.10-bullseye",
   "features": {
     "github-cli": "latest"
@@ -31,18 +31,31 @@
         "telemetry.enableTelemetry": false,
         "telemetry.telemetryLevel": "off",
         "github.telemetry.enabled": false,
-        "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+        "python.defaultInterpreterPath": "/usr/bin/python3",
         "python.terminal.activateEnvironment": true,
+        "python.venvPath": "${workspaceFolder}",
+        "python.venvFolders": [
+          "."
+        ],
         "python.formatting.provider": "black",
         "editor.formatOnSave": true,
+        "jupyter.kernels.filter": [
+          "venv"
+        ],
+        "jupyter.interactiveWindow.kernelName": "venv",
         "jupyter.askForKernelRestart": false,
         "jupyter.enableAutoStart": true,
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.env.linux": {
+          "TERM": "xterm-256color"
+        },
+        "code-runner.runInTerminal": true
       }
     }
   },
-  "remoteUser": "vscode",
-  "postCreateCommand": "python3 -m venv venv && . venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && python -m ipykernel install --user --name=venv --display-name 'Python (venv)' && nbstripout --install --attributes .gitattributes && bash .devcontainer/setup.sh",
+  "remoteUser": "root",
+  "initializeCommand": "id vscode >/dev/null 2>&1 && sudo chown -R vscode:vscode /workspaces || true",
+  "postCreateCommand": "bash .devcontainer/postCreate.sh",
   "containerEnv": {
     "PIP_DISABLE_PIP_VERSION_CHECK": "1",
     "PYTHONUNBUFFERED": "1"
